@@ -18,7 +18,10 @@ requirements.txt - list the installation requirments for the workflow (in this c
 
 # Running the Code Locally  
 Instructions for testing the project locally:  
-**1 - Have Python3 installed, and ideally create a Virtual Environment**  
+**1 - Have Python3 installed, and ideally create a new Virtual Environment**  
+
+>python3 -m venv venv  
+>source venv/bin/activate  
 
 **2 - Clone the Repo**  
 
