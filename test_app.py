@@ -25,7 +25,7 @@ def test_get_all_items(app, example_item):
 
 def test_get_single_item(app, example_item):
     app.post("/api/items", json=example_item)
-    response = app.get(f"/api/items/{example_item["id"]}")
+    response = app.get(f"/api/items/{example_item['id']}")
     assert response.status_code == 200
     assert response.get_json() == example_item
 
