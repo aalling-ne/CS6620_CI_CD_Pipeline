@@ -38,3 +38,7 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - name: Make scripts executable
+      run: chmod +x test.show
+    - name: Run Dockerfile.test shell scripts
+      run: ./test.sh
