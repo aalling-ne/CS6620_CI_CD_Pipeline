@@ -34,7 +34,7 @@ def test_update_single_item(app, example_item):
 
     updated_item = {'id': '1', 'favorite_color': 'green'}
 
-    response = app.put(f"/api/items/{example_item["id"]}", json = updated_item)
+    response = app.put(f"/api/items/{example_item['id']}", json = updated_item)
     assert response.status_code == 200
     assert response.get_json() == updated_item
 
