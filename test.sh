@@ -12,7 +12,7 @@ docker build -t flask-api .
 docker run -d --rm --name flask-api --network flask-test-net -p 5000:5000 flask-api
 
 # wait for API to be up
-for i in {1..10}; do
+for i in {1..30}; do
   if curl -s http://localhost:5000/health >/dev/null; then
     echo "API is up!"
     break
