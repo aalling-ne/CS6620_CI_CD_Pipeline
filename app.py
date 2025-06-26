@@ -50,4 +50,9 @@ def delete_single_item(item_id):
     del app_dictionary[item_id]
     return "Success", 204
 
+# HEALTH CHECKER
+@app.route('/health')
+def health():
+    return "ok", 200
+
 
