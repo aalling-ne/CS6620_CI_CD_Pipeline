@@ -20,7 +20,7 @@ def test_get_single_item(example_item):
     requests.post(f"{BASE_URL}/api/items", json=example_item)
     response = requests.get(f"{BASE_URL}/api/items/{example_item['id']}")
     assert response.status_code == 200
-    assert response.json() == example_item
+    assert response.get_json() == example_item
 
 def test_update_single_item(example_item):
     requests.post(f"{BASE_URL}/api/items", json=example_item)
