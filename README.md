@@ -47,3 +47,23 @@ Instructions for testing the project locally:
 
 > chmod +x run.sh  
 > ./run.sh
+
+# Testing the API with curl  
+The REST API can be tested with curl as follows:  
+**1 - POST**  
+
+> curl -X POST http://localhost:5000/api/items -H "Content-Type: application/json" -d '{"id": "1", "name": "Test Item"}'
+
+Expected Status Code - 201
+
+**2 - PUT**  
+
+> curl -X PUT http://localhost:5000/api/items/1 -H "Content-Type: application/json" -d '{"id": "1", "favorite_color": "green"}'
+
+Expected Status Code - 200
+
+**3 - DELETE**
+
+> curl -X DELETE http://localhost:5000/api/items/1
+
+Expected Status Code - 204
