@@ -15,11 +15,13 @@ app_dictionary = {}
 
 # SET UP AWS
 
-# s3
+# initialize s3
 s3 = boto3.client(
     "s3",
     endpoint_url = os.environ.get("S3_ENDPOINT_URL"),
-    region_name = os.environ.get("AWS_REGION")
+    region_name = os.environ.get("AWS_REGION"),
+    aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY")
     )
 
 def create_s3_bucket():
@@ -31,12 +33,14 @@ def create_s3_bucket():
         else:
             raise
 
-# dynamodb
+# initialize dynamodb
 
 dynamodb = boto3.resource(
     "dynamodb",
     endpoint_url = os.environ.get("DYNAMODB_ENDPOINT_URL"),
-    region_name = os.environ.get("AWS_REGION")
+    region_name = os.environ.get("AWS_REGION"),
+    aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY")
 )
 
 def create_dynamodb_table():
