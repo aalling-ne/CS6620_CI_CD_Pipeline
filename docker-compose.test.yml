@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  flask-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  flask-api-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      - flask-api
+    environment:
+      BASE_URL: http://flask-api:5000

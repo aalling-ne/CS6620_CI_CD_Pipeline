@@ -23,5 +23,5 @@ jobs:
     - name: Make scripts executable
       run: chmod +x test.sh
 
-    - name: Run Dockerfile.test shell scripts
+    - name: Run test shell script (docker-compose.test.yml -> Dockerfile and Dockerfile.test)
       run: ./test.sh
