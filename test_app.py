@@ -96,10 +96,10 @@ def test_put_bad_request():
 
 # DELETE
 def test_delete_single_item(example_item):
-    s3.Bucket("s3bucket").objects.all().delete()
+    item = {'id': 'example', 'favorite_color': 'blue'}
 
-    requests.post(f"{BASE_URL}/api/items", json=example_item)
-    response = requests.delete(f"{BASE_URL}/api/items/1")
+    requests.post(f"{BASE_URL}/api/items", json=item)
+    response = requests.delete(f"{BASE_URL}/api/items/example")
     assert response.status_code == 204
 
     time.sleep(1)
