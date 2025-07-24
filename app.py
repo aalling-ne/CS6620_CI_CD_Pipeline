@@ -3,10 +3,75 @@
 # Alexander Alling
 
 from flask import Flask, jsonify, request, abort
+import boto3
+from botocore.exceptions import ClientError
+import os
+import json
+
 
 app = Flask(__name__)
 
 app_dictionary = {}
+
+# SET UP AWS
+
+# s3
+s3 = boto3.client(
+    "s3",
+    endpoint_url = os.environ.get("S3_ENDPOINT_URL"),
+    region_name = os.environ.get("AWS_REGION")
+    )
+
+def create_s3_bucket():
+    try:
+        s3.create_bucket(Bucket="s3bucket")
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'BucketAlreadyOwnedByYou':
+            print("Bucket already created.")
+        else:
+            raise
+
+# dynamodb
+
+dynamodb = boto3.resource(
+    "dynamodb",
+    endpoint_url = os.environ.get("DYNAMODB_ENDPOINT_URL"),
+    region_name = os.environ.get("AWS_REGION")
+)
+
+def create_dynamodb_table():
+    try:
+        dynamodb.create_table(
+            TableName="dynamodb_table",
+            KeySchema=[{"AttributeName":"id", "KeyType": "HASH"}],
+            AttributeDefinitions=[{'AttributeName': 'id', 'AttributeType': 'S'}],
+            BillingMode='PAY_PER_REQUEST'
+        )
+    except ClientError as e:
+        if e.response['Error']['Code'] != 'ResourceInUseException':
+            print("Table already created.")
+        else:
+            raise
+
+# initialize s3 bucket and db table
+create_s3_bucket()
+create_dynamodb_table()
+
+# S3 Helper Functions
+def copy_to_s3(item):
+    s3.put_object(Bucket="s3bucket", Key=item["id"], Body=json.dumps(item))
+
+def delete_from_s3(item_id):
+    s3.delete_object(Bucket="s3bucket", Key=item_id)
+
+# DynamoDB Helper Functions
+def copy_to_dynamodb(item):
+    dynamodb.Table("dynamodb_table").put_item(Item=item)
+
+def delete_from_dynamodb(item_id):
+    dynamodb.Table("dynamodb_table").delete_item(Key={"id": item_id})
+
+# APP ROUTES ---------------------------------
 
 # POST METHODS
 
@@ -16,6 +81,8 @@ def create_item():
     if (not item) or ("id" not in item):
         abort(400, "Post requests must be made with the following format: {'id': 'example_id', ...other key-value pairs...}")
     app_dictionary[item['id']] = item
+    copy_to_dynamodb(item)
+    copy_to_s3(item)
     return item, 201
 
 # GET METHODS
@@ -39,6 +106,8 @@ def update_single_item(item_id):
     if (item_id not in app_dictionary):
         abort(404, "The item_id you are trying to modify does not exist.")
     app_dictionary[item_id] = item
+    copy_to_dynamodb(item)
+    copy_to_s3(item)
     return item, 200
 
 # DELETE METHODS
@@ -48,6 +117,8 @@ def delete_single_item(item_id):
     if (item_id not in app_dictionary):
         abort(404, "The item_id you are trying to delete does not exist.")
     del app_dictionary[item_id]
+    delete_from_dynamodb(item_id)
+    delete_from_s3(item_id)
     return "Success", 204
 
 # HEALTH CHECKER
