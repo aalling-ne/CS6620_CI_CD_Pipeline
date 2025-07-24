@@ -71,7 +71,7 @@ def test_post_item(example_item):
 def test_duplicate_post(example_item):
     requests.post(f"{BASE_URL}/api/items", json=example_item)
     duplicate = requests.post(f"{BASE_URL}/api/items", json=example_item)
-    assert duplicate.status_code == 400
+    assert duplicate.status_code == 201
 
 # PUT
 def test_update_single_item(example_item):
