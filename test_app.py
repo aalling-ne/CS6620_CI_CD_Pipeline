@@ -3,7 +3,6 @@ import requests
 import os
 import boto3
 from botocore.exceptions import ClientError
-import json
 import time
 
 # BASE_URL is set in docker-compose.test.yml, or defaults to localhost if tests are ran without using Docker Compose
@@ -35,8 +34,8 @@ def get_item_from_dynamodb(item_id):
     return dynamodb.Table("dynamodb_table").get_item(Key={"id": item_id}).get("Item")
 
 def get_item_from_s3(item_id):
-    response = s3.get_object(Bucket="s3bucket", Key=f"{item_id}.json")
-    return json.loads(response['Body'].read())
+    response = s3.get_object(Bucket="s3bucket", Key=item_id)
+    return response['Body'].read()
 
 # Tests
 
