@@ -84,6 +84,8 @@ def create_item():
     item = request.get_json()
     if (not item) or ("id" not in item):
         abort(400, "Post requests must be made with the following format: {'id': 'example_id', ...other key-value pairs...}")
+    if item['id'] in app_dictionary:
+        abort(400, "Item with that id already in database. POST not accepted.")
     app_dictionary[item['id']] = item
     copy_to_dynamodb(item)
     copy_to_s3(item)
