@@ -21,6 +21,7 @@ services:
       dockerfile: Dockerfile.test
     depends_on:
       - flask-api
+      - localstack
     environment:
       BASE_URL: http://flask-api:5000
       AWS_REGION: us-east-1
@@ -33,6 +34,6 @@ services:
     image: localstack/localstack
     environment:
       - SERVICES=s3,dynamodb
-      - DEBUG=1
+      - DEBUG=0
     ports:
       - "4566:4566"
