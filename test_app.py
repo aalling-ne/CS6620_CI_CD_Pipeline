@@ -9,9 +9,22 @@ import time
 # BASE_URL is set in docker-compose.test.yml, or defaults to localhost if tests are ran without using Docker Compose
 BASE_URL = os.environ.get("BASE_URL", "http://localhost:5000")
 
-# AWS Connection
-s3 = boto3.client('s3', endpoint_url=os.environ.get("S3_ENDPOINT"))
-dynamodb = boto3.resource('dynamodb', endpoint_url=os.environ.get("DYNAMODB_ENDPOINT"))
+# AWS Connections
+s3 = boto3.client(
+    "s3",
+    endpoint_url = os.environ.get("S3_ENDPOINT_URL"),
+    region_name = os.environ.get("AWS_REGION"),
+    aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    )
+
+dynamodb = boto3.resource(
+    "dynamodb",
+    endpoint_url = os.environ.get("DYNAMODB_ENDPOINT_URL"),
+    region_name = os.environ.get("AWS_REGION"),
+    aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+)
 
 @pytest.fixture
 def example_item():
