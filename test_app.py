@@ -1,7 +1,9 @@
 import pytest
 import requests
+import os
 
-BASE_URL = "http://flask-api:5000"
+# BASE_URL is set in docker-compose.test.yml, or defaults to localhost if tests are ran without using Docker Compose
+BASE_URL = os.environ.get("BASE_URL", "http://localhost:5000")
 
 @pytest.fixture
 def example_item():
