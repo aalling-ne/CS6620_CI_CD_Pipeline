@@ -4,6 +4,7 @@ import os
 import boto3
 from botocore.exceptions import ClientError
 import time
+import json
 
 # BASE_URL is set in docker-compose.test.yml, or defaults to localhost if tests are ran without using Docker Compose
 BASE_URL = os.environ.get("BASE_URL", "http://localhost:5000")
@@ -35,7 +36,8 @@ def get_item_from_dynamodb(item_id):
 
 def get_item_from_s3(item_id):
     response = s3.get_object(Bucket="s3bucket", Key=item_id)
-    return response['Body'].read()
+    body = response['Body'].read().decode("utf-8")
+    return json.loads(body)
 
 # Tests
 
@@ -102,3 +104,8 @@ def test_delete_single_item(example_item):
 
     assert get_item_from_dynamodb(example_item["id"]) is None
     assert get_item_from_s3(example_item["id"]) is None
+
+def test_delete_bad_request():
+    bad_item = {'id': 'doesnotexist', 'favorite_color': 'octarine'}
+    response = requests.delete(f"{BASE_URL}/api/items/doesnotexist", json=bad_item)
+    assert response.status_code == 404
