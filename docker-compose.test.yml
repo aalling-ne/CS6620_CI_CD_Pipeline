@@ -14,3 +14,11 @@ services:
       - flask-api
     environment:
       BASE_URL: http://flask-api:5000
+
+  localstack:
+    image: localstack/localstack
+      enviornment:
+        - SERVICES s3,dynamodb
+        - DEBUG=1
+      ports:
+        - "4566:4566"
