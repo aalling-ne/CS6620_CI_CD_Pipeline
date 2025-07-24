@@ -5,6 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - localstack
+    environment:
+      BASE_URL: http://flask-api:5000
+      AWS_REGION: us-east-1
+      DYNAMODB_ENDPOINT_URL: http://localstack:4566
+      S3_ENDPOINT_URL: http://localstack:4566
 
   flask-api-test:
     build:
@@ -14,6 +21,9 @@ services:
       - flask-api
     environment:
       BASE_URL: http://flask-api:5000
+      AWS_REGION: us-east-1
+      DYNAMODB_ENDPOINT_URL: http://localstack:4566
+      S3_ENDPOINT_URL: http://localstack:4566
 
   localstack:
     image: localstack/localstack
