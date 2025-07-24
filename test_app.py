@@ -35,9 +35,15 @@ def get_item_from_dynamodb(item_id):
     return dynamodb.Table("dynamodb_table").get_item(Key={"id": item_id}).get("Item")
 
 def get_item_from_s3(item_id):
-    response = s3.get_object(Bucket="s3bucket", Key=item_id)
-    body = response['Body'].read().decode("utf-8")
-    return json.loads(body)
+    try:
+        response = s3.get_object(Bucket="s3bucket", Key=item_id)
+        body = response['Body'].read().decode("utf-8")
+        return json.loads(body)
+    except ClientError as e:
+        if e.response['Error']['Code'] == "NoSuchKey":
+            return None
+        else:
+            raise
 
 # Tests
 
