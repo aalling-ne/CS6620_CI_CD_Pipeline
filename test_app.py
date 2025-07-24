@@ -104,8 +104,8 @@ def test_delete_single_item(example_item):
 
     time.sleep(1)
 
-    assert get_item_from_dynamodb(example_item["id"]) is None
-    assert get_item_from_s3(example_item["id"]) is None
+    assert get_item_from_dynamodb(item["id"]) is None
+    assert get_item_from_s3(item["id"]) is None
 
 def test_delete_bad_request():
     bad_item = {'id': 'doesnotexist', 'favorite_color': 'octarine'}
