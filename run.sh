@@ -1,3 +1,4 @@
 #!/bin/bash
-docker build -t flask-api .
-docker run -p 5000:5000 flask-api
+set -e
+
+docker compose up --build
