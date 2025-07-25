@@ -1,20 +1,22 @@
-# CS6620_CI_CD_Pipeline Assignment - Part 2
+# CS6620_CI_CD_Pipeline Assignment - Part 3
 Alexander Alling
 CS6620
 Summer 2025
 
 # Description
-This repo demonstrates how to use Dockerfiles and shell scripts to run a simple Flask REST API in a platform independant way. It also shows using Docker in a CI/CD workflow in GitHub Actions by automatically running the shell script.
+This repo demonstrates how to use Docker Compose along with Dockerfiles and shell scripts to run a Flask REST API which stores data in an AWS S3 Bucket and DynamoDB Table (simulated using Localstack). The functionality of the REST API and AWS Storage is verified automatically with a CI/CD workflow in GitHub Actions.
 
 # Included Files
 **app.py** - The Flask application that serves as our simple REST API  
 **test_app.py** - Pytest unit tests configured for use with Docker  
-> note: the base url "http://flask-api:5000" is appropriate when app.py is running in a Docker Image named "flask-api". If you are not running app.py and test_app.py with the provided Dockerfiles, you'll need to connect to the localhost instead "http://localhost:5000".
+> note: the base url "http://flask-api:5000" is set automatically by an environment variable in docker-compose.test.yml. If you do not use the provided Compose files, no environment variables are set, and "http://localhost:5000" is used automatically instead.
 
-**requirements.txt** - lists the required files for running and testing the app. Currently - flask, pytest, requests  
+**requirements.txt** - lists the required files for running and testing the app. Currently - flask, pytest, requests, boto3  
 **Dockerfile** - creates a docker image that runs app.py  
-**run.sh** - builds the primary Dockerfile. This script is not used in the GitHub Actions workflow, and is provided for running app.py in a Docker container outside of testing.  
+**docker-compose.yml** - Docker Compose file that runs localstack and the REST API application (by using the Dockerfile).  
+**run.sh** - runs docker-compose.yml. This script is not used in the GitHub Actions workflow, and is provided for running app.py and localstack in Docker containers outside of testing.  
 **Dockerfile.test** - creates a docker image that runs test_app.py  
+**docker-compose.test.yml** - Docker Compose file that runs localstack and the REST API application (by using the Dockerfile), then runs test_app.py (by using Dockerfile.test).  
 **test.sh** - Creates a Docker network, builds the Dockerfile, confirms the API's health, then builds Dockerfile.test and runs the Pytest unit tests.  
 
 **/.github/workflows/python-app.yml** - workflow file using GitHub Actions to run test.sh, which creates the Docker containers and runs the app and tests. 
@@ -28,7 +30,7 @@ The workflow can be triggered manually with the **Run Workflow** button.
 
 # Running the Code Locally  
 Instructions for testing the project locally:  
-**1 - Have Docker Installed**  
+**1 - Have Docker Compose Installed**  
 
 **2 - Clone the Repo**  
 
