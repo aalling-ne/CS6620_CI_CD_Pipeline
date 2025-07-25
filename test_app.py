@@ -48,11 +48,6 @@ def get_item_from_s3(item_id):
 # Tests
 
 # GET
-def test_get_all_items(example_item):
-    requests.post(f"{BASE_URL}/api/items", json=example_item)
-    response = requests.get(f"{BASE_URL}/api/items")
-    assert response.status_code == 200
-
 def test_get_single_item(example_item):
     requests.post(f"{BASE_URL}/api/items", json=example_item)
     response = requests.get(f"{BASE_URL}/api/items/{example_item['id']}")
@@ -63,9 +58,16 @@ def test_get_single_item(example_item):
     assert get_item_from_dynamodb(example_item["id"]) == example_item
     assert get_item_from_s3(example_item["id"]) == example_item
 
+# this test is as close as we can get to testing "incorrect parameters"m since the only parameter is the string id in the URL
+# entering nothing just directs you to the get_all_items route.
 def test_get_bad_request():
     response = requests.get(f"{BASE_URL}/api/items/thisItemDoesntExist")
     assert response.status_code == 404
+
+def test_get_all_items(example_item):
+    requests.post(f"{BASE_URL}/api/items", json=example_item)
+    response = requests.get(f"{BASE_URL}/api/items")
+    assert response.status_code == 200
 
 # POST
 def test_post_item(example_item):
