@@ -80,3 +80,21 @@ https://ruan.dev/blog/2024/08/06/getting-started-with-localstack-overview-setup-
 https://last9.io/blog/docker-compose-health-checks/  
 https://docs.python.org/3/library/json.html  
 
+**ChatGPT**  
+Prompt:  
+> Running my tests, I have an issue with the asserts using:
+assert get_item_from_s3(example_item["id"]) == example_item (or modified_item, etc)
+
+> None of these assertions pass, though all of the dynamodb assertions work, so I assume the issue is in how I'm retrieving items from the S3 bucket.
+
+> Here's the function in test_app.py:
+
+> def get_item_from_s3(item_id):
+    response = s3.get_object(Bucket="s3bucket", Key=f"{item_id}.json")
+    return json.loads(response['Body'].read())
+file attached to prompt  
+
+Prompt: 
+> It looks like the issue is that getting the item from the s3 bucket returns a byte literal. Here's the relevant error line.
+
+> flask-api-test-1  | E       assert b'{"id": "1",... "Test Item"}' == {'id': '1', '...: 'Test Item'}
