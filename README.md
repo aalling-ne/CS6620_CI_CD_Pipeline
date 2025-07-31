@@ -68,4 +68,15 @@ Expected Status Code - 200
 
 > curl -X DELETE http://localhost:5000/api/items/1
 
-Expected Status Code - 204
+Expected Status Code - 204  
+
+# Resources Utilized  
+
+https://docs.docker.com/guides/localstack/  
+https://docs.localstack.cloud/aws/services/s3/  
+https://docs.localstack.cloud/aws/getting-started/installation/  
+https://docs.localstack.cloud/aws/capabilities/config/credentials/  
+https://ruan.dev/blog/2024/08/06/getting-started-with-localstack-overview-setup-and-practical-usage-guide  
+https://last9.io/blog/docker-compose-health-checks/  
+https://docs.python.org/3/library/json.html  
+
